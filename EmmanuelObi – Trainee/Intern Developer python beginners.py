@@ -1,7 +1,8 @@
-# 1.) Extract the colors from the html file provided ‘python_class_test.html’, using regular expression
+# Extract the colors from the html file provided ‘python_class_test.html’, using regular expression
 import re
 import random
-from numpy import array
+import numpy
+import psycopg2
 
 file = open('python_class_test.html', 'r')
 text = file.read()
@@ -10,7 +11,7 @@ file.close()
 
 pattern = re.compile(r'<td>(.*?)[,](.*?)[,](.*?)[,](.*?)[,](.*?)[,](.*?)[,](.*?)[,](.*?)[,](.*?)[,](.*?)[,](.*?)[,](.*?)[,](.*?)[,](.*?)[,](.*?)[,](.*?)[,](.*?)[,](.*?)[,](.*?)</td>')
 match = pattern.findall(text)
-#print(match)
+#(match)
 
 # Storing them in a dictionary, using color as key and their frequency as values.
 store_house = {}
@@ -30,20 +31,56 @@ def myfunc(My_list, store):
 myfunc(match, store_house)
 
 
- #Which color of shirt is the mean color?
+ #1.) Which color of shirt is the mean color?
 #using numpy library
 
-print(array([store_house[k] for k in store_house]).mean())
+print(numpy.array([store_house[k] for k in store_house]).mean())
 
- #Which color is mostly worn throughout the week? 
-
- #Which color is the median?
+# the mean value == 7.916666666666667,  mean color should be orange / red.
 
 
+ # 2.) Which color is mostly worn throughout the week? 
+ #the most worn color == color with most frequency
+
+most_freq = max(store_house, key=store_house.get)  
+print(most_freq, store_house[most_freq])
+# most frquent color == Blue 
 
 
-# 7.) BONUS write a recursive searching algorithm to search for a number entered by user in a list of numbers
-"""
+ #3.) Which color is the median?
+
+ #6.) Save the colours and their frequencies in postgresql database
+def InsertData(store):
+    try:
+        connection = psycopg2.connect(user="postgres",
+                                      password="Kolikoman",
+                                      host="127.0.0.1",
+                                      port="5432",
+                                      database="postgres")
+        cursor = connection.cursor()
+        sql_insert_query = """ INSERT INTO ColorFreq (id, color, Freq) 
+                           VALUES (%s,%s,%s) """
+
+        # executemany() to insert multiple rows rows
+        result = cursor.executemany(sql_insert_query, store)
+        connection.commit()
+        print(cursor.rowcount, "data inserted successfully into ColorFreq table")
+
+    except (Exception, psycopg2.Error) as error:
+        print("Failed inserting record into ColorFreq table {}".format(error))
+
+    finally:
+        # closing database connection.
+        if (connection):
+            cursor.close()
+            connection.close()
+            print("PostgreSQL connection is closed")
+
+BabyNames = match
+InsertData(store_house)
+
+#7.) BONUS write a recursive searching algorithm to search for a number entered by user in a list of numbers
+
 My_list = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
 
 x = int(input("Enter a search number: "))
@@ -67,10 +104,11 @@ if result != -2:
     print("Key is present at index " + str(result))
 else:
     print("Key is not present in this List. ")
-"""
-# 8.) Write a program that generates random 4 digits number of 0s and 1s and convert the generated number to base 10
-"""
-# Function to create the random binary string 
+
+
+#8.) Write a program that generates random 4 digits number of 0s and 1s and convert the generated number to base 10
+
+#Function to create the random binary string 
 def randomBinary(n): 
     
     #  storing the string in variable
@@ -91,9 +129,9 @@ generated_binary_string = randomBinary(n)
 converted_binary_string = int(generated_binary_string, 2)
 
 print(converted_binary_string)
-"""
+
 # 9.) Write a program to sum the first 50 Fibonacci sequence
-"""
+
 # a is the amount to sum
 a = 50
 
@@ -107,4 +145,5 @@ def fibonacci(n):
 fib_list = list(fibonacci(a))
 the_sum = sum(fib_list)
 print(the_sum)
-"""
+
+
