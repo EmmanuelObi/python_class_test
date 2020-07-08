@@ -1,41 +1,46 @@
 # 1.) Extract the colors from the html file provided ‘python_class_test.html’, using regular expression
 import re
 import random
+from numpy import array
 
 file = open('python_class_test.html', 'r')
 text = file.read()
 file.close()
 
 
-pattern = re.compile(r'<td>(.*?)[,](.*?)</td>')
+pattern = re.compile(r'<td>(.*?)[,](.*?)[,](.*?)[,](.*?)[,](.*?)[,](.*?)[,](.*?)[,](.*?)[,](.*?)[,](.*?)[,](.*?)[,](.*?)[,](.*?)[,](.*?)[,](.*?)[,](.*?)[,](.*?)[,](.*?)[,](.*?)</td>')
 match = pattern.findall(text)
-print(match)
+#print(match)
+
+# Storing them in a dictionary, using color as key and their frequency as values.
+store_house = {}
+
+def myfunc(My_list, store):
+    for tup in My_list:
+        for color in tup:
+            if color in store:
+                store[color] += 1
+
+            else:
+                store[color] = 1
 
 
-def CountFrequency(my_list): 
-  
-    # Creating an empty dictionary  
-    freq = {} 
-    for color in match:
-        #for color in line:
-        if (color in freq): 
-            freq[color] += 1
-        else: 
-            freq[color] = 1
-  
-    for key, value in freq.items(): 
-        print ("% s : % d"%(key, value)) 
-  
-# Driver function 
-if __name__ == "__main__":  
-  
-    CountFrequency(match) 
+    print(store)
 
-"""
-print(re.search(r'<td>(.*?)</td>', text).group())
-print(re.search(r'<td>(.*?)[,](.*?)</td>', text).group())
+myfunc(match, store_house)
 
-"""
+
+ #Which color of shirt is the mean color?
+#using numpy library
+
+print(array([store_house[k] for k in store_house]).mean())
+
+ #Which color is mostly worn throughout the week? 
+
+ #Which color is the median?
+
+
+
 
 # 7.) BONUS write a recursive searching algorithm to search for a number entered by user in a list of numbers
 """
