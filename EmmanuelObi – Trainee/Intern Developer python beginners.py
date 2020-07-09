@@ -87,7 +87,7 @@ prob(store_house[' RED'], total)
 
 # the probability == 0.09473684210526316
 
-"""
+
  #6.) Save the colours and their frequencies in postgresql database
 def InsertData(store):
     try:
@@ -97,9 +97,9 @@ def InsertData(store):
                                       port="5432",
                                       database="postgres")
         cursor = connection.cursor()
-        sql_insert_query = """ #INSERT INTO ColorFreq (id, color, Freq) 
-                           #VALUES (%s,%s,%s) """
-"""
+        sql_insert_query = """ INSERT INTO ColorFreq (id, color, Freq) 
+                           VALUES (%s,%s,%s) """
+
         # executemany() to insert multiple rows rows
         result = cursor.executemany(sql_insert_query, store)
         connection.commit()
@@ -185,4 +185,3 @@ fib_list = list(fibonacci(a))
 the_sum = sum(fib_list)
 print(the_sum)
 
-"""
