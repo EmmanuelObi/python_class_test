@@ -115,7 +115,6 @@ def InsertData(store):
             connection.close()
             print("PostgreSQL connection is closed")
 
-BabyNames = match
 InsertData(store_house)
 
 #7.) BONUS write a recursive searching algorithm to search for a number entered by user in a list of numbers
